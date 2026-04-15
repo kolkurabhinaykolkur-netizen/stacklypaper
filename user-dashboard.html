@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI;}
+
+/* BODY */
+body{
+display:flex;
+background:linear-gradient(135deg,#3e2f1c,#6b4f2a,#a67c52);
+min-height:100vh;
+overflow-x:hidden;
+}
+
+/* SIDEBAR */
+.sidebar{
+width:240px;
+background:#4e3620;
+padding:20px;
+position:fixed;
+height:100%;
+left:0;
+transition:.3s;
+z-index:1000;
+}
+
+.sidebar h2{
+color:#f3e2c7;
+margin-bottom:20px;
+}
+
+.sidebar a{
+display:block;
+color:#e6d3b3;
+padding:10px;
+margin:8px 0;
+border-radius:6px;
+cursor:pointer;
+}
+
+.sidebar a:hover{
+background:#c19a6b;
+color:#fff;
+}
+
+.close-btn{
+display:none;
+color:white;
+font-size:20px;
+cursor:pointer;
+margin-bottom:10px;
+}
+
+/* MAIN */
+.main{
+margin-left:240px;
+width:100%;
+}
+
+/* TOPBAR */
+.topbar{
+background:#4e3620;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+color:#fff;
+}
+
+.hamburger{
+display:none;
+font-size:22px;
+cursor:pointer;
+}
+
+.email{
+color:#f3e2c7;
+font-weight:600;
+}
+
+.exit{
+background:#8b5e3c;
+border:none;
+padding:8px 14px;
+border-radius:6px;
+color:white;
+cursor:pointer;
+}
+
+.exit:hover{
+background:#a67c52;
+}
+
+/* CARDS */
+.cards{
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.card{
+background:#fffaf3;
+padding:20px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+font-weight:600;
+}
+
+/* CHARTS */
+.charts{
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
+}
+
+.chart-box{
+background:#fffaf3;
+padding:15px;
+border-radius:12px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+.sidebar{left:-240px;}
+.sidebar.active{left:0;}
+.main{margin-left:0;}
+.hamburger{display:block;}
+.close-btn{display:block;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+
+<div class="close-btn" onclick="closeSidebar()">✖</div>
+
+<h2>👤 User Panel</h2>
+
+<a onclick="loadDashboard()">Dashboard</a>
+<a onclick="loadOrders()">My Orders</a>
+<a onclick="loadProfile()">Profile</a>
+<a onclick="loadActivity()">Activity</a>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+
+<div style="display:flex;gap:10px;align-items:center;">
+<div class="hamburger" onclick="openSidebar()">☰</div>
+<h3 id="pageTitle">Dashboard</h3>
+</div>
+
+<div>
+<span class="email" id="userEmail"></span>
+<button class="exit" onclick="logout()">Exit</button>
+</div>
+
+</div>
+
+<div id="content"></div>
+
+</div>
+
+<script>
+
+/* EMAIL */
+document.getElementById("userEmail").innerText =
+localStorage.getItem("loggedEmail") || "user@gmail.com";
+
+/* SIDEBAR */
+function openSidebar(){
+document.getElementById("sidebar").classList.add("active")
+}
+function closeSidebar(){
+document.getElementById("sidebar").classList.remove("active")
+}
+
+/* CHART CONTROL */
+let charts=[];
+function clearCharts(){
+charts.forEach(c=>c.destroy());
+charts=[];
+}
+
+/* DASHBOARD */
+function loadDashboard(){
+
+clearCharts();
+document.getElementById("pageTitle").innerText="Dashboard";
+
+document.getElementById("content").innerHTML=`
+<div class="cards">
+<div class="card">My Orders: 25</div>
+<div class="card">Delivered: 20</div>
+<div class="card">Pending: 3</div>
+<div class="card">Cancelled: 2</div>
+</div>
+
+<div class="charts">
+<div class="chart-box"><canvas id="c1"></canvas></div>
+<div class="chart-box"><canvas id="c2"></canvas></div>
+</div>
+`;
+
+charts.push(new Chart(document.getElementById("c1"),{
+type:"bar",
+data:{
+labels:["Jan","Feb","Mar","Apr"],
+datasets:[{
+label:"Orders",
+data:[5,8,6,10],
+backgroundColor:"#8b5e3c"
+}]}
+}));
+
+charts.push(new Chart(document.getElementById("c2"),{
+type:"doughnut",
+data:{
+labels:["Delivered","Pending","Cancelled"],
+datasets:[{
+data:[20,3,2],
+backgroundColor:["#8b5e3c","#c19a6b","#6b4f2a"]
+}]}
+}));
+
+}
+
+/* ORDERS */
+function loadOrders(){
+
+clearCharts();
+document.getElementById("pageTitle").innerText="My Orders";
+
+document.getElementById("content").innerHTML=`
+<div class="charts">
+<div class="chart-box"><canvas id="c3"></canvas></div>
+</div>
+`;
+
+charts.push(new Chart(document.getElementById("c3"),{
+type:"line",
+data:{
+labels:["Order1","Order2","Order3"],
+datasets:[{
+label:"Order Status",
+data:[1,2,3],
+borderColor:"#a67c52"
+}]}
+}));
+
+}
+
+/* PROFILE WITH GRAPH */
+function loadProfile(){
+
+clearCharts();
+document.getElementById("pageTitle").innerText="Profile";
+
+let email = localStorage.getItem("loggedEmail") || "user@gmail.com";
+
+document.getElementById("content").innerHTML=`
+<div class="cards">
+<div class="card">Email: ${email}</div>
+<div class="card">Membership: Premium</div>
+<div class="card">Total Orders: 25</div>
+<div class="card">Total Spend: ₹12,500</div>
+</div>
+
+<div class="charts">
+<div class="chart-box">
+<canvas id="profileChart"></canvas>
+</div>
+</div>
+`;
+
+charts.push(new Chart(document.getElementById("profileChart"),{
+type:"line",
+data:{
+labels:["Jan","Feb","Mar","Apr","May"],
+datasets:[{
+label:"Spending Trend",
+data:[2000,2500,1800,3000,3200],
+borderColor:"#8b5e3c",
+backgroundColor:"rgba(139,94,60,0.2)",
+fill:true,
+tension:0.4
+}]
+}
+}));
+
+}
+
+/* ACTIVITY */
+function loadActivity(){
+
+clearCharts();
+document.getElementById("pageTitle").innerText="Activity";
+
+document.getElementById("content").innerHTML=`
+<div class="charts">
+<div class="chart-box"><canvas id="c4"></canvas></div>
+</div>
+`;
+
+charts.push(new Chart(document.getElementById("c4"),{
+type:"bar",
+data:{
+labels:["Logins","Orders","Payments"],
+datasets:[{
+label:"Activity",
+data:[10,25,15],
+backgroundColor:"#6b4f2a"
+}]}
+}));
+
+}
+
+/* LOGOUT */
+function logout(){
+localStorage.removeItem("loggedEmail");
+window.location.href="index.html";
+}
+
+/* DEFAULT */
+loadDashboard();
+
+</script>
+
+</body>
+</html>

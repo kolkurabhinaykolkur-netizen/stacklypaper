@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stackly Packaging Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI;}
+
+/* BODY */
+body{
+display:flex;
+background:linear-gradient(135deg,#3e2f1c,#6b4f2a,#a67c52);
+color:#2c2c2c;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+/* SIDEBAR */
+.sidebar{
+width:240px;
+background:#4e3620;
+padding:20px;
+position:fixed;
+height:100%;
+left:0;
+transition:.3s;
+z-index:1000;
+}
+
+.sidebar h2{
+color:#f3e2c7;
+margin-bottom:20px;
+}
+
+.sidebar a{
+display:block;
+color:#e6d3b3;
+padding:10px;
+margin:8px 0;
+border-radius:6px;
+cursor:pointer;
+transition:.3s;
+}
+
+.sidebar a:hover{
+background:#c19a6b;
+color:#fff;
+}
+
+/* MAIN */
+.main{
+margin-left:240px;
+width:100%;
+}
+
+/* TOPBAR */
+.topbar{
+background:#4e3620;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+color:#fffaf3;
+}
+
+.hamburger{
+display:none;
+font-size:22px;
+cursor:pointer;
+}
+
+.email{
+color:#f3e2c7;
+font-weight:600;
+}
+
+.exit{
+background:#8b5e3c;
+border:none;
+padding:8px 14px;
+border-radius:6px;
+color:white;
+cursor:pointer;
+}
+
+.exit:hover{
+background:#a67c52;
+}
+
+/* CARDS */
+.cards{
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.card{
+background:#fffaf3;
+padding:20px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+font-weight:600;
+}
+
+/* CHARTS */
+.charts{
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
+}
+
+.chart-box{
+background:#fffaf3;
+padding:15px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* TABLE */
+.table-section{
+padding:20px;
+overflow-x:auto;
+}
+
+table{
+width:100%;
+background:#fffaf3;
+border-radius:10px;
+overflow:hidden;
+}
+
+th{
+background:#c19a6b;
+color:white;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #e6d3b3;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+.sidebar{left:-240px;}
+.sidebar.active{left:0;}
+.main{margin-left:0;}
+.hamburger{display:block;}
+.close-btn{display:block;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+<div class="close-btn" onclick="closeSidebar()">✖</div>
+
+<h2>📦 Stackly Packaging</h2>
+
+<a onclick="loadDashboard()">Dashboard</a>
+<a href="404.html" onclick="loadOrders(); return false;">Orders</a>
+<a href="404.html" onclick="loadInventory(); return false;">Inventory</a>
+<a href="404.html" onclick="loadCustomers(); return false;">Customers</a>
+<a href="404.html" onclick="loadAnalytics(); return false;">Analytics</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+<div style="display:flex;gap:10px;align-items:center;">
+<div class="hamburger" onclick="openSidebar()">☰</div>
+<h3 id="pageTitle">Dashboard</h3>
+</div>
+
+<div>
+<span class="email" id="userEmail"></span>
+<button class="exit" onclick="location.href='index.html'">Exit</button>
+</div>
+</div>
+
+<div id="content"></div>
+
+</div>
+<script>
+
+/* EMAIL */
+document.getElementById("userEmail").innerText =
+localStorage.getItem("loggedEmail")
+
+/* SIDEBAR */
+function openSidebar(){
+document.getElementById("sidebar").classList.add("active")
+}
+function closeSidebar(){
+document.getElementById("sidebar").classList.remove("active")
+}
+
+/* COMMON FUNCTION TO DESTROY OLD CHARTS */
+let charts = [];
+function clearCharts(){
+charts.forEach(c => c.destroy());
+charts = [];
+}
+
+/* DASHBOARD */
+function loadDashboard(){
+
+clearCharts();
+
+document.getElementById("pageTitle").innerText="Dashboard"
+
+document.getElementById("content").innerHTML=`
+<div class="cards">
+<div class="card">Orders: 520</div>
+<div class="card">Packages: 1200</div>
+<div class="card">Deliveries: 980</div>
+<div class="card">Returns: 35</div>
+</div>
+
+<div class="charts">
+<div class="chart-box"><canvas id="c1"></canvas></div>
+<div class="chart-box"><canvas id="c2"></canvas></div>
+</div>
+`
+
+charts.push(new Chart(document.getElementById("c1"),{
+type:"bar",
+data:{
+labels:["Mon","Tue","Wed","Thu","Fri"],
+datasets:[{
+label:"Orders",
+data:[120,200,150,300,250],
+backgroundColor:"#8b5e3c"
+}]}
+}));
+
+charts.push(new Chart(document.getElementById("c2"),{
+type:"line",
+data:{
+labels:["Morning","Afternoon","Evening"],
+datasets:[{
+label:"Deliveries",
+data:[300,450,350],
+borderColor:"#a67c52"
+}]}
+}));
+
+}
+
+/* ORDERS */
+function loadOrders(){
+
+clearCharts();
+
+document.getElementById("pageTitle").innerText="Orders"
+
+document.getElementById("content").innerHTML=`
+<div class="table-section">
+<table>
+<tr><th>Order ID</th><th>Status</th></tr>
+<tr><td>#101</td><td>Shipped</td></tr>
+<tr><td>#102</td><td>Processing</td></tr>
+</table>
+</div>
+
+<div class="charts">
+<div class="chart-box"><canvas id="c3"></canvas></div>
+</div>
+`
+
+charts.push(new Chart(document.getElementById("c3"),{
+type:"pie",
+data:{
+labels:["Shipped","Processing","Pending"],
+datasets:[{
+data:[60,25,15],
+backgroundColor:["#8b5e3c","#c19a6b","#6b4f2a"]
+}]}
+}));
+
+}
+
+/* INVENTORY */
+function loadInventory(){
+
+clearCharts();
+
+document.getElementById("pageTitle").innerText="Inventory"
+
+document.getElementById("content").innerHTML=`
+<div class="cards">
+<div class="card">Boxes: 500</div>
+<div class="card">Labels: 2000</div>
+</div>
+
+<div class="charts">
+<div class="chart-box"><canvas id="c4"></canvas></div>
+</div>
+`
+
+charts.push(new Chart(document.getElementById("c4"),{
+type:"bar",
+data:{
+labels:["Boxes","Labels","Tape","Covers"],
+datasets:[{
+label:"Stock",
+data:[500,2000,800,300],
+backgroundColor:"#a67c52"
+}]}
+}));
+
+}
+
+/* CUSTOMERS */
+function loadCustomers(){
+
+clearCharts();
+
+document.getElementById("pageTitle").innerText="Customers"
+
+document.getElementById("content").innerHTML=`
+<div class="cards">
+<div class="card">Active Customers: 320</div>
+<div class="card">New Signups: 50</div>
+</div>
+
+<div class="charts">
+<div class="chart-box"><canvas id="c5"></canvas></div>
+</div>
+`
+
+charts.push(new Chart(document.getElementById("c5"),{
+type:"line",
+data:{
+labels:["Jan","Feb","Mar","Apr"],
+datasets:[{
+label:"Users Growth",
+data:[100,200,280,370],
+borderColor:"#8b5e3c"
+}]}
+}));
+
+}
+
+/* ANALYTICS */
+function loadAnalytics(){
+
+clearCharts();
+
+document.getElementById("pageTitle").innerText="Analytics"
+
+document.getElementById("content").innerHTML=`
+<div class="charts">
+<div class="chart-box"><canvas id="c6"></canvas></div>
+<div class="chart-box"><canvas id="c7"></canvas></div>
+</div>
+`
+
+charts.push(new Chart(document.getElementById("c6"),{
+type:"doughnut",
+data:{
+labels:["Delivered","Returned"],
+datasets:[{
+data:[85,15],
+backgroundColor:["#8b5e3c","#c19a6b"]
+}]}
+}));
+
+charts.push(new Chart(document.getElementById("c7"),{
+type:"bar",
+data:{
+labels:["Week1","Week2","Week3","Week4"],
+datasets:[{
+label:"Revenue",
+data:[5000,7000,6500,9000],
+backgroundColor:"#6b4f2a"
+}]}
+}));
+
+}
+
+/* DEFAULT */
+loadDashboard()
+
+</script>
+
+</body>
+</html>

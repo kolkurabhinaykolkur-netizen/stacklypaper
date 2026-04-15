@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Stackly Packaging | Secure Login</title>
+
+<style>
+
+/* RESET */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI, sans-serif;
+}
+
+/* BODY */
+body{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#3e2f1c,#6b4f2a,#a67c52);
+padding:20px;
+}
+
+/* CONTAINER */
+.container{
+background:#fffaf3;
+width:100%;
+max-width:420px;
+padding:35px;
+border-radius:16px;
+box-shadow:0 10px 30px rgba(0,0,0,0.25);
+color:#333;
+border:2px solid #e6d3b3;
+}
+
+/* LOGO */
+.logo{
+text-align:center;
+margin-bottom:10px;
+}
+
+.logo img{
+width:110px;
+}
+
+/* TITLE */
+h2{
+text-align:center;
+margin-bottom:10px;
+color:#5a3e1b;
+}
+
+/* SUBTEXT */
+.sub-text{
+text-align:center;
+font-size:14px;
+color:#7a5c3a;
+margin-bottom:20px;
+}
+
+/* LABEL */
+label{
+font-weight:600;
+font-size:14px;
+display:block;
+margin-bottom:6px;
+color:#5a3e1b;
+}
+
+/* INPUT */
+input,select{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border:1px solid #d2b48c;
+border-radius:8px;
+font-size:15px;
+outline:none;
+background:#fffdf8;
+}
+
+/* FOCUS */
+input:focus,select:focus{
+border-color:#a67c52;
+box-shadow:0 0 5px rgba(166,124,82,0.4);
+}
+
+/* PASSWORD */
+.password-box{
+position:relative;
+}
+
+.password-box span{
+position:absolute;
+right:12px;
+top:12px;
+cursor:pointer;
+color:#6b4f2a;
+}
+
+/* BUTTON */
+button{
+width:100%;
+padding:13px;
+background:linear-gradient(90deg,#8b5e3c,#c19a6b);
+border:none;
+color:white;
+font-weight:bold;
+border-radius:8px;
+cursor:pointer;
+font-size:15px;
+}
+
+button:hover{
+opacity:.9;
+}
+
+/* BACK BUTTON */
+.back-btn{
+background:#e6d3b3;
+color:#5a3e1b;
+}
+
+.back-btn:hover{
+background:#d9c2a3;
+}
+
+/* BUTTON GROUP */
+.btn-group{
+display:flex;
+gap:10px;
+}
+
+/* FORGOT */
+.forgot{
+text-align:right;
+margin-top:-10px;
+margin-bottom:15px;
+}
+
+.forgot a{
+font-size:13px;
+color:#8b5e3c;
+text-decoration:none;
+}
+
+.forgot a:hover{
+text-decoration:underline;
+}
+
+/* REGISTER */
+.register{
+text-align:center;
+margin-top:12px;
+font-size:14px;
+color:#555;
+}
+
+.register a{
+color:#8b5e3c;
+font-weight:600;
+}
+
+/* MOBILE */
+@media (max-width:480px){
+.container{
+padding:25px;
+}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+<img src="images/logo2.webp" alt="Stackly Logo">
+</div>
+
+<h2>📦 Stackly Packaging Login</h2>
+
+<p class="sub-text">
+Secure access to your packaging solutions dashboard.
+</p>
+
+<form id="loginForm">
+
+<label>Login As</label>
+
+<select id="role" required>
+<option value="">Select Role</option>
+<option value="admin">Admin</option>
+<option value="user">User</option>
+</select>
+
+<label>Email Address</label>
+<input type="email" id="email" placeholder="Enter your email" required>
+
+<label>Password</label>
+
+<div class="password-box">
+<input type="password" id="password" required>
+<span onclick="togglePassword()">👁</span>
+</div>
+
+<div class="forgot">
+<a href="404.html">Forgot Password?</a>
+</div>
+
+<div class="btn-group">
+<button type="button" class="back-btn" onclick="goBack()">Back</button>
+<button type="submit">Login</button>
+</div>
+
+</form>
+
+<div class="register">
+Don't have an account? <a href="register.html">Register</a>
+</div>
+
+</div>
+
+<script>
+
+/* BACK */
+function goBack(){
+window.location.href="index.html"
+}
+
+/* PASSWORD TOGGLE */
+function togglePassword(){
+let field=document.getElementById("password")
+field.type = field.type === "password" ? "text" : "password"
+}
+
+/* LOGIN */
+document.getElementById("loginForm").addEventListener("submit",function(e){
+
+e.preventDefault()
+
+let email=document.getElementById("email").value
+let password=document.getElementById("password").value
+let role=document.getElementById("role").value
+
+let user=JSON.parse(localStorage.getItem("stacklyUser"))
+
+if(user && email===user.email && password===user.password && role===user.role){
+
+localStorage.setItem("loggedEmail",email)
+
+/* ROLE BASED REDIRECT */
+if(role==="admin"){
+window.location.href="admin-dashboard.html"
+}
+else if(role==="user"){
+window.location.href="user-dashboard.html"
+}
+
+}else{
+alert("Invalid login credentials")
+}
+
+})
+
+</script>
+
+</body>
+</html>

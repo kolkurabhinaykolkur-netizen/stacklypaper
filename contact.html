@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shopify Style Header</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="scroll-text">
+    🚀 Free Shipping Above ₹999 | Best Packaging Solutions | Contact Now!
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+
+  <!-- LEFT -->
+  <div class="left">
+    <div class="hamburger" id="hamburger">☰</div>
+    <a href="index.html" class="logo">
+  <img src="images/logo2.webp" alt="Stackly Logo">
+</a>
+  </div>
+
+  <!-- CENTER NAV (DESKTOP) -->
+  <nav class="nav-desktop">
+ <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+    <a href="blogs.html">Blogs</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <button class="login-btn">Login</button>
+  </div>
+
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+
+  <div class="menu-header">
+    <span>Menu</span>
+    <span class="close-btn" id="closeBtn">✕</span>
+  </div>
+
+ <ul class="menu-list">
+  <li>
+    <a href="index.html" class="menu-item">HOME <span>▾</span></a>
+  </li>
+  <li>
+    <a href="about.html" class="menu-item">ABOUT US <span>▾</span></a>
+  </li>
+  <li>
+    <a href="services.html" class="menu-item">SERVICES <span>▾</span></a>
+  </li>
+  <li>
+    <a href="blogs.html" class="menu-item">BLOGS <span>▾</span></a>
+  </li>
+  <li>
+    <a href="contact.html" class="menu-item">CONTACT <span>▾</span></a>
+  </li>
+</ul>
+
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay"></div>
+
+
+
+
+<section class="contact-page">
+
+  <div class="contact-container">
+
+    <!-- LEFT INFO -->
+    <div class="contact-info">
+      <h2>Get in Touch</h2>
+      <p>
+        Have questions about our packaging solutions? Our team is here to help you.
+      </p>
+
+      <div class="info-item">
+        <h4>📍 Address</h4>
+        <p>Hyderabad, India</p>
+      </div>
+
+      <div class="info-item">
+        <h4>📞 Phone</h4>
+        <p>+91 9876543210</p>
+      </div>
+
+      <div class="info-item">
+        <h4>✉ Email</h4>
+        <p>support@stackly.com</p>
+      </div>
+
+      <div class="info-item">
+        <h4>⏰ Working Hours</h4>
+        <p>Mon - Sat: 9:00 AM - 7:00 PM</p>
+      </div>
+    </div>
+
+    <!-- RIGHT FORM -->
+    <div class="contact-form">
+      <form id="contactForm" onsubmit="return validateForm()">
+
+  <div class="input-row">
+    <input type="text" id="name" placeholder="Your Name">
+    <input type="email" id="email" placeholder="Your Email">
+  </div>
+
+  <input type="text" id="phone" placeholder="Phone Number">
+
+  <textarea id="message" placeholder="Your Message"></textarea>
+
+  <button type="submit">Send Message</button>
+
+</form>
+    </div>
+
+  </div>
+
+</section>
+
+
+<script>
+// Create or get error element
+function setError(input, message) {
+  let error = input.nextElementSibling;
+
+  // if no error div exists, create one
+  if (!error || !error.classList.contains("error")) {
+    error = document.createElement("div");
+    error.className = "error";
+    error.style.color = "red";
+    error.style.fontSize = "12px";
+    input.parentNode.insertBefore(error, input.nextSibling);
+  }
+
+  error.innerText = message;
+}
+
+// Clear error
+function clearError(input) {
+  let error = input.nextElementSibling;
+  if (error && error.classList.contains("error")) {
+    error.innerText = "";
+  }
+}
+
+// NAME (only letters)
+document.getElementById("name").addEventListener("input", function () {
+  this.value = this.value.replace(/[^A-Za-z ]/g, '');
+
+  if (this.value.trim() === "") {
+    setError(this, "Please enter your name");
+  } else {
+    clearError(this);
+  }
+});
+
+// EMAIL
+document.getElementById("email").addEventListener("input", function () {
+  let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+  if (this.value.trim() === "") {
+    setError(this, "Please enter your email");
+  } else if (!pattern.test(this.value)) {
+    setError(this, "Enter valid email");
+  } else {
+    clearError(this);
+  }
+});
+
+document.getElementById("phone").addEventListener("input", function () {
+
+  // Remove non-numbers
+  this.value = this.value.replace(/[^0-9]/g, '');
+
+  // ✅ Limit to 10 digits STRICTLY
+  if (this.value.length > 10) {
+    this.value = this.value.slice(0, 10);
+  }
+
+  // Error handling
+  if (this.value.length < 10) {
+    setError(this, "Enter 10 digit number");
+  } else {
+    clearError(this);
+  }
+});
+// MESSAGE
+document.getElementById("message").addEventListener("input", function () {
+  if (this.value.trim() === "") {
+    setError(this, "Please enter your message");
+  } else {
+    clearError(this);
+  }
+});
+
+// FINAL VALIDATION
+function validateForm() {
+  let name = document.getElementById("name");
+  let email = document.getElementById("email");
+  let phone = document.getElementById("phone");
+  let message = document.getElementById("message");
+
+  let isValid = true;
+
+  // Name
+  if (name.value.trim() === "") {
+    setError(name, "Please enter your name");
+    isValid = false;
+  }
+
+  // Email
+  let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+  if (email.value.trim() === "") {
+    setError(email, "Please enter your email");
+    isValid = false;
+  } else if (!pattern.test(email.value)) {
+    setError(email, "Enter valid email");
+    isValid = false;
+  }
+
+  // Phone
+  if (phone.value.length < 10) {
+    setError(phone, "Enter 10 digit number");
+    isValid = false;
+  }
+
+  // Message
+  if (message.value.trim() === "") {
+    setError(message, "Please enter your message");
+    isValid = false;
+  }
+
+  return isValid;
+}
+</script>
+
+
+<iframe 
+  src="https://www.google.com/maps?q=Madhapur,Hyderabad&output=embed"
+  width="100%" 
+  height="300" 
+  style="border:0; border-radius:10px;" 
+  allowfullscreen="" 
+  loading="lazy">
+</iframe>
+
+
+
+<footer class="footer">
+  <div class="footer-container">
+
+    <!-- LOGO -->
+    <div class="footer-col">
+
+<a href="index.html">
+  <img src="IMAGES/logo2.webp" class="logo" alt="Stackly Logo">
+</a>
+
+      <p>
+        The point of using is that it has a more or less normal distribution 
+        of letters as opposed to using content here
+      </p>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="footer-col">
+      <h3>About styler</h3>
+      <a href="about.html">About us</a>
+      <a href="404.html">Cart</a>
+      <a href="contact.html">Contact</a>
+      <a href="404.html">Terms & condition</a>
+      <a href="404.html">Faq’s</a>
+    </div>
+
+    <!-- STATIC -->
+    <div class="footer-col">
+      <h3>Static content</h3>
+      <a href="404.html">Privacy policy</a>
+      <a href="404.html">Card bag</a>
+      <a href="404.html">Cello tape</a>
+      <a href="404.html">Paper box</a>
+      <a href="404.html">Scissors</a>
+    </div>
+
+    <!-- INFO -->
+    <div class="footer-col">
+      <h3>Information</h3>
+      <a href="404.html">News</a>
+      <a href="404.html">News right</a>
+      <a href="404.html">News without</a>
+      <a href="404.html">Contact us</a>
+      <a href="about.html">About us</a>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="footer-col">
+      <h3>Contact us</h3>
+      <p>+44-1234567890</p>
+      <p>demo@support.com</p>
+      <p>14 Ringe lane, las vegas, nv, 89156 united states</p>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>Copyright © 2025 Stackly</p>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
