@@ -36,7 +36,9 @@
 
   <!-- RIGHT -->
   <div class="right">
-    <button class="login-btn">Login</button>
+  <button class="login-btn" onclick="window.location.href='login.html'">
+  Login
+</button>
   </div>
 
 </header>
@@ -324,7 +326,9 @@
         </div>
         <h3>Custom Box</h3>
         <p>Strong and durable packaging solution.</p>
-        <button>View Details</button>
+      <button onclick="window.location.href='404.html'">
+  View Details
+</button>
       </div>
 
       <!-- PRODUCT 2 -->
@@ -334,7 +338,9 @@
         </div>
         <h3>Gift Package</h3>
         <p>Perfect packaging for gifts and occasions.</p>
-        <button>View Details</button>
+     <button onclick="window.location.href='404.html'">
+  View Details
+</button>
       </div>
 
       <!-- PRODUCT 3 -->
@@ -344,7 +350,9 @@
         </div>
         <h3>Eco Pack</h3>
         <p>Environment-friendly packaging solution.</p>
-        <button>View Details</button>
+        <button onclick="window.location.href='404.html'">
+  View Details
+</button>
       </div>
 
       <!-- PRODUCT 4 -->
@@ -354,7 +362,9 @@
         </div>
         <h3>Retail Bag</h3>
         <p>Stylish packaging for retail products.</p>
-        <button>View Details</button>
+     <button onclick="window.location.href='404.html'">
+  View Details
+</button>
       </div>
 
     </div>
@@ -436,40 +446,69 @@
 </section>
 
 
+
+
+
+
 <section class="newsletter">
   <div class="newsletter-container">
 
     <h2>OUR NEWSLETTER</h2>
 
+
     <div class="subscribe-box">
-      <input type="email" placeholder="Enter your mail">
-      <button>SUBSCRIBE</button>
-    </div>
+  <input type="email" id="email" placeholder="Enter your mail">
+  <button onclick="validateEmail()">SUBSCRIBE</button>
+  
+  <!-- Error Message -->
+  <p id="errorMsg" style="color:red; font-size:14px; margin-top:5px;"></p>
+</div>
+
+<script>
+  function validateEmail() {
+    let email = document.getElementById("email").value;
+    let errorMsg = document.getElementById("errorMsg");
+
+    // Email pattern
+    let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+    if (email === "") {
+      errorMsg.innerText = "Please fill your email";
+    } 
+    else if (!pattern.test(email)) {
+      errorMsg.innerText = "Please enter a valid email";
+    } 
+    else {
+      errorMsg.innerText = ""; // clear message
+      window.location.href = "404.html";
+    }
+  }
+</script>
 <div class="social-icons">
 
   <!-- Facebook -->
-  <a href="#">
+  <a href="404.html">
     <svg viewBox="0 0 24 24">
       <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-2.9h2V9.8c0-2 1.2-3.1 3-3.1.9 0 1.8.2 1.8.2v2h-1c-1 0-1.3.6-1.3 1.2v1.5h2.3l-.4 2.9h-1.9v7A10 10 0 0 0 22 12z"/>
     </svg>
   </a>
 
   <!-- Twitter -->
-  <a href="#">
+  <a href="404.html">
     <svg viewBox="0 0 24 24">
       <path d="M22 5.8c-.7.3-1.5.6-2.3.7.8-.5 1.4-1.3 1.7-2.2-.8.5-1.7.9-2.6 1.1A4.1 4.1 0 0 0 12 8.3c0 .3 0 .6.1.9A11.6 11.6 0 0 1 3 4.9a4.1 4.1 0 0 0 1.3 5.5c-.6 0-1.2-.2-1.7-.5v.1c0 2 1.4 3.7 3.3 4-.3.1-.7.1-1 .1-.3 0-.5 0-.8-.1.5 1.6 2.1 2.7 3.9 2.8A8.3 8.3 0 0 1 2 18.6a11.7 11.7 0 0 0 6.3 1.8c7.6 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1z"/>
     </svg>
   </a>
 
   <!-- Instagram -->
-  <a href="#">
+  <a href="404.html">
     <svg viewBox="0 0 24 24">
       <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm5 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm6.5-.9a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
     </svg>
   </a>
 
   <!-- YouTube -->
-  <a href="#">
+  <a href="404.html">
     <svg viewBox="0 0 24 24">
       <path d="M21.8 8s-.2-1.4-.8-2c-.7-.8-1.5-.8-1.9-.9C16.5 5 12 5 12 5h0s-4.5 0-7.1.1c-.4 0-1.2 0-1.9.9-.6.6-.8 2-.8 2S2 9.6 2 11.3v1.4c0 1.7.2 3.3.2 3.3s.2 1.4.8 2c.7.8 1.7.8 2.1.9 1.5.1 6.4.1 6.4.1s4.5 0 7.1-.1c.4 0 1.2 0 1.9-.9.6-.6.8-2 .8-2s.2-1.6.2-3.3v-1.4c0-1.7-.2-3.3-.2-3.3zM10 15V9l5 3-5 3z"/>
     </svg>
@@ -478,6 +517,7 @@
 </div>
   </div>
 </section>
+
 
 
 <footer class="footer">
